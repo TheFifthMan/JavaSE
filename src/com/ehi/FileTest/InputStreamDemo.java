@@ -1,6 +1,9 @@
 package com.ehi.FileTest;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -10,7 +13,9 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.StringBufferInputStream;
 import java.io.Writer;
@@ -55,6 +60,28 @@ public class InputStreamDemo {
 		System.out.println(new String(b));
 		input.close();
 		out.close();
+	}
+	//缓存
+	public static void bufferToFile() throws IOException{
+		File file2 = new File("."+File.separator+"resources"+File.separator+"test3.txt");
+		InputStream in = new FileInputStream(file);
+		BufferedInputStream bf = new BufferedInputStream(in);
+		byte[] cache = new byte[1024];
+		//bf.read(cache);
+		//System.out.println(new String(cache));
+		OutputStream outfile = new FileOutputStream(file2);
+		BufferedOutputStream out = new BufferedOutputStream(outfile);
+		int length = 0;
+	    while ((length = bf.read(cache)) != -1) {
+	         /** 将数据写入目标文件：length 代表实际读取的字节数 */
+	         out.write(cache, 0, length);
+	     }
+		out.flush();
+		in.close();
+		bf.close();
+		outfile.close();
+		out.close();
+		
 	}
 	//保存图片
 	public static void writeToImages() throws Exception{
@@ -114,11 +141,45 @@ public class InputStreamDemo {
 		wr.close();
 	}
 	
+	public static void readerFile() throws IOException{
+		Reader rd = new FileReader(file);
+		BufferedReader br = new BufferedReader(rd);
+		char[] cache = new char[1024];
+		br.read(cache, 0, cache.length);
+		System.out.println(new String(cache));
+	}
+	public static void writerFile() throws IOException{
+		Reader rd = new FileReader(file);
+		BufferedReader br = new BufferedReader(rd);
+		char[] cache = new char[1024];
+		br.read(cache);
+		File file4 = new File("."+File.separator+"resources"+File.separator+"test4.txt");
+		Writer wd = new FileWriter(file4);
+		BufferedWriter bw = new BufferedWriter(wd);
+		bw.write(new String(cache));
+		bw.flush();
+	}
+	
+	public static void writeToImage() throws IOException{
+		InputStream rd = new FileInputStream(new File("."+File.separator+"resources"+File.separator+"1.jpg"));
+		InputStreamReader br = new InputStreamReader(rd);
+		char[] cache = new char[1024];
+		br.read(cache);
+		File file4 = new File("."+File.separator+"resources"+File.separator+"2.jpg");
+		OutputStream wd = new FileOutputStream(file4);
+		OutputStreamWriter bw = new OutputStreamWriter(wd);
+		bw.write(new String(cache));
+		bw.flush();
+	}
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		try {
 			//writeToFile();
-			readBufferedStream();
+			//readBufferedStream();
+			//bufferToFile();
+			//readerFile();
+			//writerFile();
+			writeToImage();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
